@@ -6,12 +6,7 @@ public class TryConcurrencyUpdate {
 
     public static void main(String [] args){
 
-        new Thread(){
-            @Override
-            public void run() {
-                browseNews();
-            }
-        }.start();
+        new Thread(() -> browseNews()).start();
 
         enjoyMusic();
 
