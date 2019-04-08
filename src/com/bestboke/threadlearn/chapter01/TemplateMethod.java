@@ -14,14 +14,12 @@ public class TemplateMethod {
 
     public static void main(String [] args){
         TemplateMethod t1 = new TemplateMethod(){
-            // 覆盖方法
             public void wrapPrint(String message){
                 System.out.println("*" + message + "*");
             }
         };
         t1.print("Hello Thread");
         TemplateMethod t2 = new TemplateMethod(){
-            // 覆盖方法
             public void wrapPrint(String message){
                 System.out.println("+" + message + "+");
             }
