@@ -27,8 +27,6 @@ public class BooleanLock implements Lock {
             this.locked = true;
             this.currentThread = currentThread();
         }
-
-
     }
 
     @Override
