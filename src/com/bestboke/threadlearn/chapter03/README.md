@@ -1,18 +1,18 @@
 ### 线程sleep
 
-sleep是一个静态方法，有两个重载方法一个需要传入毫秒数，一个需要传入毫秒数和纳秒数。
+`sleep()`是一个静态方法，有两个重载方法一个需要传入毫秒数，一个需要传入毫秒数和纳秒数。
 源码中关于第二方法则是当纳秒数大于500000或者毫秒数为零时将毫秒数++然后调用第一个方法。
 
 ### 线程yield
 
-yield一种启发式的方法，会提醒调度器我愿意放弃当前CPU的资源，但是如果CPU的资源不紧张时则会忽略这种提醒。
+`yield()`一种启发式的方法，会提醒调度器我愿意放弃当前CPU的资源，但是如果CPU的资源不紧张时则会忽略这种提醒。
 
-- sleep会导致当前线程暂停指定时间，没有CPU时间片的消耗。
-- yield只是对CPU调度器的一个提示，如果CPU调度器没有忽略这个提示，就会导致上下文的切换。
-- sleep会导致线程短暂block，会在给定时间内释放CPU资源。
-- yield会使RUNNING状态的Thread进入RUNNABLE状态(如果CPU调度器没有忽略这个提示)。
-- sleep几乎百分百地完成了给定时间的休眠，而yield的提示并不能一定担保。
-- 一个线程sleep另一个线程调用interrupt会捕获到中断信号，而yield则不会。
+- `sleep()`会导致当前线程暂停指定时间，没有CPU时间片的消耗。
+- `yield()`只是对CPU调度器的一个提示，如果CPU调度器没有忽略这个提示，就会导致上下文的切换。
+- `sleep()`会导致线程短暂block，会在给定时间内释放CPU资源。
+- `yield()`会使RUNNING状态的Thread进入RUNNABLE状态(如果CPU调度器没有忽略这个提示)。
+- `sleep()`几乎百分百地完成了给定时间的休眠，而`yield()`的提示并不能一定担保。
+- 一个线程`sleep()`另一个线程调用`interrupt()`会捕获到中断信号，而`yield()`则不会。
 
 ### 线程优先级
 
@@ -26,10 +26,33 @@ yield一种启发式的方法，会提醒调度器我愿意放弃当前CPU的资
 **中断方法**
 
 - `public void interrupt()` 中断线程。
-- `public static boolean interrupted()` 查询当前线程中断状态，如果已经发生中断，就清除中断状态并返回true。
 - `public boolean isInterruputed()` 仅仅是查询当前线程是否是中断状态。
+- `public static boolean interrupted()` 查询当前线程中断状态，如果已经发生中断，就清除中断状态并返回true。
 
-**interrupt**
+**interrupt()**
 
-当线程进入阻塞状态时，另外一个线程调用被阻塞线程的interrupt方法，则会打断当前线程的阻塞状态，打断线程并不是意味着该线程的生命周期已经结束，仅仅是打断了阻塞状态。  
-线程被打断时会抛出一个`InterruptedException`异常。
+当线程进入阻塞状态时，另外一个线程调用被阻塞线程的`interrupt()`方法，则会打断当前线程的阻塞状态，打断线程并不是意味着该线程的生命周期已经结束，仅仅是打断了阻塞状态。  
+线程阻塞发生中断时会抛出一个`InterruptedException`异常。  
+当线程正在运行时调用`interrupt()`方法时并不会抛出`InterruptedException`异常，也就是不会中断正在运行的进程。
+
+**isInterruputed()**
+
+`isInterrupted()` 方法仅仅是判断是否是处于中断状态。  
+`interrupt()`方法源码如下  
+
+![](http://ww2.sinaimg.cn/large/006tNc79gy1g3b7mzhkc1j31m40e0jti.jpg)
+
+可以看到其中的一句注释 *`// Just to set the interrupt flag`* 
+线程是否是中断状态是依据中断标识来进行判断。  
+被阻塞的线程中断抛出异常后中断的标识将会被复位。 
+
+**interrupted()**
+
+`interrupted()`方法在判断当前线程是否是在中断状态的同时将中断的标识复位，类似于`get()`之后又执行了`set()`操作。  
+也就是讲当线程被中断后第一次执行了`interrupted()`方法之后返回的是`true`，后面继续执行返回的都是`false`。
+下图是关于`isInterrupted()`与`interrupted()`方法源码部分
+
+![](http://ww4.sinaimg.cn/large/006tNc79gy1g3biq89gosj31cm0u012v.jpg)
+
+最终执行的是一个私有的`native`方法`isInterrupted()`,只是`interrupted()`传入的参数是`ture`而`isInterrupted()`传入的是`false`,
+这里的`true`和`false`可能代表是否复位线程的中断标识。
