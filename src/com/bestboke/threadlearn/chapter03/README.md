@@ -55,9 +55,17 @@
 ![](http://ww4.sinaimg.cn/large/006tNc79gy1g3biq89gosj31cm0u012v.jpg)
 
 最终执行的是一个私有的`native`方法`isInterrupted()`,只是`interrupted()`传入的参数是`ture`而`isInterrupted()`传入的是`false`,
-这里的`true`和`false`可能代表是否复位线程的中断标识。  
+这里的`true`和`false`代表是否重置线程的中断标识。  
 
 ### 线程join
 
-线程A
+`join`某个线程B，会使当前线程A进入等待状态，直到线程B结束生命周期或者到达给定时间，此时的A线程是处于`BLOCKED`状态的，而不是B。 
 
+### 线程的run和start
+
+- `run()`方法是在启动线程之后由jvm虚拟机直接调用的，如果手动调用则仅仅是相当于一个方法调用，还是由原来的线程去执行并不是新建的线程执行。所以直接调用`run()`和创建多线程的初衷是相违背的。  
+- `start()`方法是启动一个新的线程，然后新的线程自己回去执行`run()`方法。该方法是真正意义上的启动线程，会出现异步执行的效果。  
+
+![](http://ww4.sinaimg.cn/large/006tNc79gy1g3h5gth759j317f0u045k.jpg)
+
+如上图所示，调用`start()`方法执行`run()`的是`t1`线程，而直接调用`run()`执行的时候是`main`线程，并不是new出来的`t2`线程。
