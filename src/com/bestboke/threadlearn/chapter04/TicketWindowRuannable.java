@@ -14,14 +14,14 @@ public class TicketWindowRuannable implements Runnable {
 
     @Override
     public void run() {
-        synchronized (MUTEX){
+        synchronized (this){
             while (index <= MAX){
                 System.out.println(Thread.currentThread().getName() + " 的号码是: " + (index ++));
-                try {
-                    TimeUnit.MILLISECONDS.sleep(2L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(2L);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
 
@@ -30,10 +30,10 @@ public class TicketWindowRuannable implements Runnable {
     public static void main(String []  args){
         final TicketWindowRuannable task = new TicketWindowRuannable();
 
-        Thread windowThread1 = new Thread(task, "一号窗口");
-        Thread windowThread2 = new Thread(task, "二号窗口");
-        Thread windowThread3 = new Thread(task, "三号窗口");
-        Thread windowThread4 = new Thread(task, "四号窗口");
+        Thread windowThread1 = new Thread(new TicketWindowRuannable(), "一号窗口");
+        Thread windowThread2 = new Thread(new TicketWindowRuannable(), "二号窗口");
+        Thread windowThread3 = new Thread(new TicketWindowRuannable(), "三号窗口");
+        Thread windowThread4 = new Thread(new TicketWindowRuannable(), "四号窗口");
 
         windowThread2.start();
         windowThread1.start();
