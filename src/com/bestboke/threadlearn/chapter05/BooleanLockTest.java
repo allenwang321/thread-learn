@@ -1,6 +1,5 @@
 package com.bestboke.threadlearn.chapter05;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.IntStream;
 
@@ -14,22 +13,23 @@ public class BooleanLockTest {
     public void syncMethod() {
 
         try {
-            lock.lock(10L);
+
             int randomInt = current().nextInt(10);
+            lock.lock(randomInt);
             System.out.println(currentThread() + " 获得锁");
-            System.out.println(lock.getBlockedThreads());
-            TimeUnit.SECONDS.sleep(randomInt);
+            //System.out.println(lock.getBlockedThreads());
+            //TimeUnit.SECONDS.sleep(randomInt);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
         } finally {
-            lock.unlcok();
+            lock.unlock();
         }
     }
 
     public static void main(String[] args) {
         BooleanLockTest booleanLockTest = new BooleanLockTest();
-        IntStream.range(0, 2).mapToObj(i -> new Thread(booleanLockTest::syncMethod)).forEach(Thread::start);
+        IntStream.range(0, 10).mapToObj(i -> new Thread(booleanLockTest::syncMethod)).forEach(Thread::start);
     }
 }

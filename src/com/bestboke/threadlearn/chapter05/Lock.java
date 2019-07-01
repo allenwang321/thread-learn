@@ -9,7 +9,7 @@ public interface Lock {
 
     void lock(long mills) throws InterruptedException, TimeoutException;
 
-    void unlcok();
+    void unlock();
 
     List<Thread> getBlockedThreads();
 

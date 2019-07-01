@@ -58,7 +58,7 @@ public class BooleanLock implements Lock {
 
 
     @Override
-    public void unlcok() {
+    public void unlock() {
         synchronized (this) {
             if (currentThread == currentThread()) {
                 this.locked = false;
