@@ -57,6 +57,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
     }
 
 
+    /**
+     * 提交任务到线程池
+     *
+     * @param runnable
+     */
     @Override
     public void execute(Runnable runnable) {
         if (this.isShutdown) {
@@ -113,6 +118,9 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         }
     }
 
+    /**
+     * 关闭线程池
+     */
     @Override
     public void shutdown() {
         synchronized (this) {
@@ -128,6 +136,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         }
     }
 
+    /**
+     * 获取初始化大小
+     *
+     * @return
+     */
     @Override
     public int getInitSize() {
         if (isShutdown) {
@@ -136,6 +149,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         return this.initSize;
     }
 
+    /**
+     * 获取最大值
+     *
+     * @return
+     */
     @Override
     public int getMaxSize() {
         if (isShutdown) {
@@ -144,6 +162,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         return this.maxSize;
     }
 
+    /**
+     * 获取线程池的核心线程数量
+     *
+     * @return
+     */
     @Override
     public int getCoreSize() {
         if (isShutdown) {
@@ -152,6 +175,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         return this.coreSize;
     }
 
+    /**
+     * 获取线程池中用于缓存队列任务的大小
+     *
+     * @return
+     */
     @Override
     public int getQueueSize() {
         if (isShutdown) {
@@ -160,6 +188,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         return runnableQueue.size();
     }
 
+    /**
+     * 获取线程池中活跃线程的数量
+     *
+     * @return
+     */
     @Override
     public int getActiveSize() {
         synchronized (this) {
@@ -167,6 +200,11 @@ public class BasicThreadPool extends Thread implements ThreadPool {
         }
     }
 
+    /**
+     * 查看线程池是否已被销毁
+     *
+     * @return
+     */
     @Override
     public boolean isShutdown() {
         return this.isShutdown;
@@ -175,6 +213,7 @@ public class BasicThreadPool extends Thread implements ThreadPool {
     private static class ThreadTask {
         Thread thread;
         InternalTask internalTask;
+
         public ThreadTask(Thread thread, InternalTask internalTask) {
             this.thread = thread;
             this.internalTask = internalTask;
